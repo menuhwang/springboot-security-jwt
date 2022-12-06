@@ -1,5 +1,6 @@
 package com.likelion.springbootsecurityjwt.config;
 
+import com.likelion.springbootsecurityjwt.util.JwtAuthenticationFilter;
 import com.likelion.springbootsecurityjwt.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,10 +22,10 @@ public class SecurityConfig {
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.cors();
-
         http.authorizeHttpRequests()
-                        .antMatchers("/api/v1/users/login").permitAll();
+                        .antMatchers("/api/v1/users/**").permitAll();
+
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
